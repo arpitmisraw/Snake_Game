@@ -50,6 +50,7 @@ def game_loop():
     apple_x = round(random.randrange(display_width-block_size)/10)*10
     apple_y = round(random.randrange(display_height-block_size)/10)*10
     snake_speed = block_size
+    count = 0
     while not game_over:
         while game_choice:
             for event in pygame.event.get():
@@ -87,6 +88,10 @@ def game_loop():
         if apple_x == snake[0][0] and apple_y == snake[0][1]:
             apple_x = round(random.randrange(display_width-block_size)/10)*10
             apple_y = round(random.randrange(display_height-block_size)/10)*10
+            if x_change>0:
+                x_add = snake[len(snake)-1][0]
+                y_add = snake[len(snake)-1][1]
+                snake.append([x_add,y_add])
         if snake[0][0]>display_width:
             snake[0][0]=0
         if snake[0][0]+block_size<0:
