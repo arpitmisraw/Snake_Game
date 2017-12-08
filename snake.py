@@ -87,16 +87,20 @@ def game_loop():
             apple_x = round(random.randrange(display_width-block_size)/20)*20
             apple_y = round(random.randrange(display_height-block_size)/20)*20
             snake.append(snake[tail-1])
+        
+        tail = len(snake)
+        print("Snake1:",snake,tail)
 
         for i in range(1,tail):
             snake[i]=snake[i-1]
+        
 
-
+        print("Snake2:",snake,tail)
 
         snake[0][0]+=x_change
         snake[0][1]+=y_change
 
-        print("Snake:",snake)
+        print("Snake3:",snake,tail)
 
         display_snake(snake,block_size)
         display_apple(apple_x,apple_y,block_size)
