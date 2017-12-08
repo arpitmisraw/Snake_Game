@@ -23,11 +23,7 @@ def game_quit():
 
 def display_snake(snake,block_size):
     for i in range(len(snake)):
-        if i==0:
-            pygame.draw.rect(game_display,red,[snake[i][0],snake[i][1],block_size,block_size])
-        else:
-            snake[i]=snake[i-1]
-            pygame.draw.rect(game_display,red,[snake[i][0],snake[i][1],block_size,block_size])
+        pygame.draw.rect(game_display,red,[snake[i][0],snake[i][1],block_size,block_size])
 
 def display_apple(apple_x,apple_y,block_size):
     pygame.draw.rect(game_display,green,[apple_x,apple_y,block_size,block_size])
@@ -40,17 +36,22 @@ def display_message(text,size,color):
 def game_loop():
     game_over = False
     game_choice = False 
-    block_size = 10
+    block_size = 20
     snake=list()
     x = display_width/2
     y = display_height/2
     snake.append([x,y])
+    snake_tail_direction = [x,y]        #[1,0] for '+'ve x direction, [-1,0] for '-'ve x direction, [0,1] for '+' y direction, [0,-1] for '-' y direction
     x_change = 0
     y_change = 0
-    apple_x = round(random.randrange(display_width-block_size)/10)*10
-    apple_y = round(random.randrange(display_height-block_size)/10)*10
+    apple_x = round(random.randrange(display_width-block_size)/20)*20
+    apple_y = round(random.randrange(display_height-block_size)/20)*20
     snake_speed = block_size
+    count = 0
     while not game_over:
+
+        tail = len(snake)
+
         while game_choice:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -79,14 +80,28 @@ def game_loop():
                     x_change = 0
                     y_change = snake_speed
         
+        
+        game_display.fill(white)
+
+        if apple_x == snake[0][0] and apple_y == snake[0][1]:
+            apple_x = round(random.randrange(display_width-block_size)/20)*20
+            apple_y = round(random.randrange(display_height-block_size)/20)*20
+            snake.append(snake[tail-1])
+
+        for i in range(1,tail):
+            snake[i]=snake[i-1]
+
+
+
         snake[0][0]+=x_change
         snake[0][1]+=y_change
-        game_display.fill(white)
+
+        print("Snake:",snake)
+
         display_snake(snake,block_size)
         display_apple(apple_x,apple_y,block_size)
-        if apple_x == snake[0][0] and apple_y == snake[0][1]:
-            apple_x = round(random.randrange(display_width-block_size)/10)*10
-            apple_y = round(random.randrange(display_height-block_size)/10)*10
+        
+        
         if snake[0][0]>display_width:
             snake[0][0]=0
         if snake[0][0]+block_size<0:
