@@ -105,13 +105,13 @@ def game_loop():
         display_apple(apple_x,apple_y,block_size)
         
         
-        if snake[0][0]>display_width:
+        if snake[0][0]+block_size == display_width and x_change>0:
             snake[0][0]=0
-        if snake[0][0]+block_size<0:
+        if snake[0][0]<0 and x_change<0:
             snake[0][0]=display_width
-        if snake[0][1]>display_height:
+        if snake[0][1]+block_size == display_height and y_change>0:
             snake[0][1]=0
-        if snake[0][1]+block_size<0:
+        if snake[0][1]<0 and y_change<0:
             snake[0][1]=display_height
             
         clock.tick(fps)
