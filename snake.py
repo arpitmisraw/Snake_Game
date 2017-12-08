@@ -21,8 +21,13 @@ def game_quit():
     quit()
 
 
-def display_snake_head(x,y,block_size):
-    pygame.draw.rect(game_display,red,[x,y,block_size,block_size])
+def display_snake(snake,block_size):
+    for i in range(len(snake)):
+        if i==0:
+            pygame.draw.rect(game_display,red,[snake[i][0],snake[i][1],block_size,block_size])
+        else:
+            snake[i]=snake[i-1]
+            pygame.draw.rect(game_display,red,[snake[i][0],snake[i][1],block_size,block_size])
 
 def display_apple(apple_x,apple_y,block_size):
     pygame.draw.rect(game_display,green,[apple_x,apple_y,block_size,block_size])
@@ -36,8 +41,10 @@ def game_loop():
     game_over = False
     game_choice = False 
     block_size = 10
+    snake=list()
     x = display_width/2
     y = display_height/2
+    snake.append([x,y])
     x_change = 0
     y_change = 0
     apple_x = round(random.randrange(display_width-block_size)/10)*10
@@ -72,26 +79,22 @@ def game_loop():
                     x_change = 0
                     y_change = snake_speed
         
-        x+=x_change
-        y+=y_change
+        snake[0][0]+=x_change
+        snake[0][1]+=y_change
         game_display.fill(white)
-        display_snake_head(x,y,block_size)
+        display_snake(snake,block_size)
         display_apple(apple_x,apple_y,block_size)
-        if apple_x == x and apple_y == y:
+        if apple_x == snake[0][0] and apple_y == snake[0][1]:
             apple_x = round(random.randrange(display_width-block_size)/10)*10
             apple_y = round(random.randrange(display_height-block_size)/10)*10
-        '''if x+block_size>display_width or x<0 or y+block_size>display_height or y<0:
-            game_display.fill(white)
-            display_message('Game Over',50,red)
-            game_choice = True'''
-        if x>display_width:
-            x=0
-        if x+block_size<0:
-            x=display_width
-        if y>display_height:
-            y=0
-        if y+block_size<0:
-            y=display_height
+        if snake[0][0]>display_width:
+            snake[0][0]=0
+        if snake[0][0]+block_size<0:
+            snake[0][0]=display_width
+        if snake[0][1]>display_height:
+            snake[0][1]=0
+        if snake[0][1]+block_size<0:
+            snake[0][1]=display_height
             
         clock.tick(fps)
         pygame.display.update()
