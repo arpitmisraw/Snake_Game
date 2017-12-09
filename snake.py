@@ -34,6 +34,8 @@ def display_message(text,size,color):
     
 
 def game_loop():
+
+    #Initial declarations
     game_over = False
     game_choice = False 
     block_size = 20
@@ -41,17 +43,19 @@ def game_loop():
     x = display_width/2
     y = display_height/2
     snake.append([x,y])
-    
     x_change = 0
     y_change = 0
     apple_x = round(random.randrange(display_width-block_size)/20)*20
     apple_y = round(random.randrange(display_height-block_size)/20)*20
     snake_speed = block_size
     count = 0
+
+    #Till the game is not over 
     while not game_over:
 
-        tail = len(snake)
+        tail = len(snake)   
 
+        #choice to continue
         while game_choice:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -62,6 +66,7 @@ def game_loop():
                     if event.key == pygame.K_ESCAPE:
                         game_quit()
 
+        #To get the event.type
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -81,30 +86,34 @@ def game_loop():
                     y_change = snake_speed
         
         
-        game_display.fill(white)
+        game_display.fill(white)        #Fill the gameboard white
 
+        #Change the position of apple and increase the length if the snake
         if apple_x == snake[0][0] and apple_y == snake[0][1]:
             apple_x = round(random.randrange(display_width-block_size)/20)*20
             apple_y = round(random.randrange(display_height-block_size)/20)*20
             temp=[[snake[tail-1][0],snake[tail-1][1]]]
             snake+=temp
         
-        tail = len(snake)
+        tail = len(snake)       #Update length of the tail
 
+        #Update the position of all blocks of the snake
         for i in range(tail-1,0,-1):
             snake[i][0]=snake[i-1][0]
             snake[i][1]=snake[i-1][1]
         
 
-
+        #Update the position of the head of the snake
         snake[0][0]+=x_change
         snake[0][1]+=y_change
 
 
+        #Display the snake and the apple
         display_snake(snake,block_size)
         display_apple(apple_x,apple_y,block_size)
         
         
+        #Boundary Conditions
         if snake[0][0]+block_size == display_width and x_change>0:
             snake[0][0]=0
         if snake[0][0]<0 and x_change<0:
@@ -114,7 +123,7 @@ def game_loop():
         if snake[0][1]<0 and y_change<0:
             snake[0][1]=display_height
             
-        clock.tick(fps)
-        pygame.display.update()
+        clock.tick(fps)     #FPS
+        pygame.display.update()     #Updates the complete display
 game_loop()
     
