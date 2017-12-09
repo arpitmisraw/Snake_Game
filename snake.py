@@ -22,8 +22,8 @@ def game_quit():
 
 
 def display_snake(snake,block_size):
-    for i in range(len(snake)):
-        pygame.draw.rect(game_display,red,[snake[i][0],snake[i][1],block_size,block_size])
+    for snake_block in snake:
+        pygame.draw.rect(game_display,red,[snake_block[0],snake_block[1],block_size,block_size])
 
 def display_apple(apple_x,apple_y,block_size):
     pygame.draw.rect(game_display,green,[apple_x,apple_y,block_size,block_size])
@@ -45,8 +45,8 @@ def game_loop():
     snake.append([x,y])
     x_change = 0
     y_change = 0
-    apple_x = round(random.randrange(display_width-block_size)/20)*20
-    apple_y = round(random.randrange(display_height-block_size)/20)*20
+    apple_x = round(random.randrange(block_size,display_width-2*block_size)/20)*20
+    apple_y = round(random.randrange(block_size,display_height-2*block_size)/20)*20
     snake_speed = block_size
     count = 0
 
@@ -90,8 +90,8 @@ def game_loop():
 
         #Change the position of apple and increase the length if the snake
         if apple_x == snake[0][0] and apple_y == snake[0][1]:
-            apple_x = round(random.randrange(display_width-block_size)/20)*20
-            apple_y = round(random.randrange(display_height-block_size)/20)*20
+            apple_x = round(random.randrange(block_size,display_width-block_size)/20)*20
+            apple_y = round(random.randrange(block_size,display_height-block_size)/20)*20
             temp=[[snake[tail-1][0],snake[tail-1][1]]]
             snake+=temp
         
@@ -114,13 +114,13 @@ def game_loop():
         
         
         #Boundary Conditions
-        if snake[0][0]+block_size == display_width and x_change>0:
+        if snake[0][0] == display_width:
             snake[0][0]=0
-        if snake[0][0]<0 and x_change<0:
+        if snake[0][0]<0:
             snake[0][0]=display_width
-        if snake[0][1]+block_size == display_height and y_change>0:
+        if snake[0][1] == display_height:
             snake[0][1]=0
-        if snake[0][1]<0 and y_change<0:
+        if snake[0][1]<0:
             snake[0][1]=display_height
             
         clock.tick(fps)     #FPS
